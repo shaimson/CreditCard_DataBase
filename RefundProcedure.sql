@@ -38,7 +38,7 @@ BEGIN
 		throw 700001, 'Credit Card expired', 1
 	end
 
-		declare @statusID int                            
+	declare @statusID int                            
 	select @statusID = [Status]
 	from CreditCard
 	where CreditCardNum like @CreditCardNum
