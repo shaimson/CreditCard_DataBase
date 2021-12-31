@@ -15,12 +15,12 @@ BEGIN
 
 	begin try
 
-	declare @curBalance decimal (8,2) 
-	select @curBalance = 
-	currentBalance from CreditCard 
+	declare @AvailCredit decimal (8,2) 
+	select @AvailCredit = 
+	AvailableCredit from CreditCard 
 	where CreditCardNum like @CreditCardNum
 
-	if @curBalance < @Amount
+	if @AvailCredit < @Amount
 	begin; 
 	throw 70000, 'Insufficient Funds', 1
 	end

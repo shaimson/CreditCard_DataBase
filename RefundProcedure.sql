@@ -18,12 +18,12 @@ BEGIN
 	SET NOCOUNT ON;
 	--check to see if card is active!! for fee also
 	begin try
-	declare @curBalance decimal (8,2) 
-	select @curBalance = 
-	currentBalance from CreditCard 
+	declare @AvailCredit decimal (8,2) 
+	select @AvailCredit = 
+	availablecredit from CreditCard 
 	where CreditCardNum like @CreditCardNum
 
-	if @curBalance < @amount
+	if @AvailCredit < @amount
 	begin; 
 	throw 70000, 'Insufficient Funds', 1
 	end
