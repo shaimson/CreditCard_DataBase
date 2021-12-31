@@ -1,0 +1,72 @@
+use master
+go 
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+create PROCEDURE usp_refund
+
+	@RefundID int,
+	@PurchaseNum int,
+	@CreditCardNum varchar(20),
+	@Amount	decimal (8,2)
+AS
+BEGIN
+
+	SET NOCOUNT ON;
+	--check to see if card is active!! for fee also
+	begin try
+	declare @curBalance decimal (8,2) 
+	select @curBalance = 
+	currentBalance from CreditCard 
+	where CreditCardNum like @CreditCardNum
+
+	if @curBalance < @amount
+	begin; 
+	throw 70000, 'Insufficient Funds', 1
+	end
+
+	declare @expDate date
+	select @expDate = 
+	ExpirationDate from CreditCard
+	where CreditCardNum like @CreditCardNum
+
+	if @expDate < GETDATE()
+	begin;
+		throw 700001, 'Credit Card expired', 1
+	end
+
+		declare @statusID int                            
+	select @statusID = [Status]
+	from CreditCard
+	where CreditCardNum like @CreditCardNum
+
+	declare @status varchar(20)
+	select @status = [Status]
+	from [Status]
+	where StatusID = @statusID
+
+	if @status not like 'Active' 
+	begin;
+		throw 80019, 'Inactive Card', 1
+	end
+
+	update CreditCard
+	set CurrentBalance = CurrentBalance - @amount
+	where CreditCardNum like @CreditCardNum
+
+	insert into Refund (RefundID, PurchaseNum, CreditCardNum, Amount)
+	values (@RefundID, @PurchaseNum, @CreditCardNum, @amount)
+
+	end try
+	begin catch;
+	
+	throw 70002, 'Refund not processed', 1;
+
+	end catch
+
+END
+GO
+
