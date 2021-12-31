@@ -9,7 +9,7 @@ GO
 CREATE PROCEDURE usp_addPayment
 	@paymentDate date,
 	@amount decimal (10,2),
-	@cardNum int
+	@cardNum varchar(16)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -19,7 +19,7 @@ BEGIN
     declare @availCredit decimal (10,2)
 	select @availCredit= AvailableCredit 
 	from CreditCard 
-	where CreditCardNum = @cardNum
+	where CreditCardNum like @cardNum
 
 	if @amount > @availCredit
 	begin;
@@ -46,7 +46,7 @@ BEGIN
 
 	update CreditCard
 	set CurrentBalance = CurrentBalance - @amount
-	where CreditCardNum = @cardNum
+	where CreditCardNum like @cardNum
 
 	end try
 	begin catch;

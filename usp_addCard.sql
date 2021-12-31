@@ -6,7 +6,6 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-
 CREATE PROCEDURE usp_addCard
 	@cardNum varchar(16), 
 	@cardType int,
@@ -37,15 +36,6 @@ BEGIN
 	throw 80000, 'Invalid Card Number', 1
 	end
 
-	declare @status varchar(20)
-	select @status = [Status] 
-	from Status
-	where StatusID = @cardStatus
-
-	if @status not like 'Active' 
-	begin;
-		throw 80009, 'Inactive Card Error', 1
-	end
 
 	insert into CreditCard(CreditCardNum, [Type], Company, IssueDate, ExpirationDate, CurrentBalance,[Status], CreditLimit)
 	values(@cardNum, @cardType, @company, @issueDate, @expirationDate, @currentBalance, @cardStatus, @creditLimit)
@@ -60,4 +50,3 @@ BEGIN
     
 END
 GO
-
