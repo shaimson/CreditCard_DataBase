@@ -38,7 +38,7 @@ create table CreditCard(
 	AvailableCredit as CreditLimit-CurrentBalance,
 	constraint [PK_CreditCard] primary key (CreditCardNum),
 	constraint [IssueDate_Check] check (IssueDate < ExpirationDate and IssueDate <= getDate()),
-	constraint [ExpDate_Check] check (ExpirationDate > IssueDate and datediff(year, getdate(), ExpirationDate) >= 3),
+	constraint [ExpDate_Check] check (ExpirationDate > IssueDate and (datediff(year, issueDate , ExpirationDate) >= 3)), 
 	constraint [Day_Of_Exp] check (ExpirationDate = eomonth(ExpirationDate)),						
 	constraint [Type_FK] foreign key ([Type]) references [CreditCardType] (TypeID),       
 	constraint [Status_FK] foreign key ([Status]) references [Status] (StatusID)
@@ -83,8 +83,6 @@ create table Purchases(
 	Constraint [FK_Vendors] foreign key (Vendor) references Vendors(VendorId),
 	Constraint [FK_CCNum] foreign key (CreditCardNum) references CreditCard(CreditCardNum),
 	constraint [Purchase_Check] check (Amount > 0) 
-	--if PurchaseType = CAR then $amount must be less or equal to 40000. 
-	--If PurchaseType = TRAVEL then $amount <= 15000 otherwise $amount <= 5000
 )
 
 create table FeeType(
@@ -107,7 +105,7 @@ constraint [FeeAmount_Check] check (Amount > 0)
 )
 
 create table Refund(
-RefundID int not null,
+RefundID int identity(1,1) not null,
 PurchaseNum int not null,
 CreditCardNum varchar(16) not null,
 Amount Decimal(10,2) not null,
