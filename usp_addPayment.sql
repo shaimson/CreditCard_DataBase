@@ -6,10 +6,10 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE PROCEDURE usp_addPayment
+ALTER PROCEDURE usp_addPayment
 	@paymentDate date,
 	@amount decimal (10,2),
-	@cardNum int
+	@cardNum varchar(16)
 AS
 BEGIN
 	SET NOCOUNT ON;
