@@ -63,9 +63,9 @@ create table PurchaseTypes(
 
 create table Vendors(
 	VendorId int not null,
-	VendorName varchar(30) not null,
-	VendorStreet varchar(15) not null,
-	VendorCity varchar(15) not null,
+	VendorName varchar(40) not null,
+	VendorStreet varchar(40) not null,
+	VendorCity varchar(40) not null,
 	VendorState varchar(2) not null,
 	VendorZip varchar(5) not null,
 	Constraint [PK_Vendors] primary key (VendorId)
