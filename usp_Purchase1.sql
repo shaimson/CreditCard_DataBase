@@ -12,7 +12,7 @@ CREATE PROCEDURE usp_Purchase
 	@date date,
 	@vendor int,
 	@purchaseType int,
-	@creditCard int
+	@creditCard varchar(16)
 AS
 BEGIN
 SET NOCOUNT ON;
@@ -20,13 +20,13 @@ SET NOCOUNT ON;
 	BEGIN TRY
 
 	declare @cardStatus int
-	select @cardStatus = Status
+	select @cardStatus = [Status]
 	from CreditCard
 	where CreditCardNum like @creditCard
 
 	declare @statusDesc varchar(20)
-	select @statusDesc = Status
-	from Status
+	select @statusDesc = [Status]
+	from [Status]
 	where @cardStatus = StatusID
 
 	if(@statusDesc like 'Cancelled' or @statusDesc like 'Lost')
@@ -44,7 +44,7 @@ SET NOCOUNT ON;
 		throw 69999, 'Card is expired', 1
 	end
 
-	declare @availableCredit decimal (8,2)
+	declare @availableCredit decimal (10,2)
 	select @availableCredit =
 	AvailableCredit from CreditCard
 	where CreditCardNum like @creditCard
@@ -59,19 +59,19 @@ SET NOCOUNT ON;
 	from PurchaseTypes
 	where TypeID = @purchaseType
 
-	if @purchaseDescription = 'CAR' and @amount > 40000
+	if @purchaseDescription like 'CAR' and @amount > 40000
 	begin;
 		throw 70001, 'Invalid purchase amount for purchase type CAR', 1
 	end
 
-	else if @purchaseDescription = 'TRAVEL' and @amount > 15000
+	else if @purchaseDescription like 'TRAVEL' and @amount > 15000
 	begin;
 		throw 70001, 'Invalid purchase amount for purchase type TRAVEL', 1
 	end
 
 	else if @amount > 5000
 	begin;
-		throw 70001, 'Invalide purchase amount for purchase type', 1
+		throw 70001, 'Invalid purchase amount for purchase type', 1
 	end
 
 	insert into Purchases(Amount,[Date], Vendor, PurchaseType, CreditCardNum)
@@ -79,6 +79,7 @@ SET NOCOUNT ON;
 
 	update CreditCard
 	set CurrentBalance = CurrentBalance + @amount
+	where CreditCardNum like @creditCard
 	
     
 	END TRY
