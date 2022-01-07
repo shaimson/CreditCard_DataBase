@@ -68,7 +68,8 @@ create table Vendors(
 	VendorCity varchar(40) not null,
 	VendorState varchar(2) not null,
 	VendorZip varchar(5) not null,
-	Constraint [PK_Vendors] primary key (VendorId)
+	constraint [PK_Vendors] primary key (VendorId),
+	constraint [Zip_Check] check (len(VendorZip) = 5)
 );
 
 create table Purchases(
