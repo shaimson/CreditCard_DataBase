@@ -16,7 +16,6 @@ AS
 BEGIN
 
 	SET NOCOUNT ON;
-	--check to see if card is active!! for fee also
 	begin try
 	declare @AvailCredit decimal (8,2) 
 	select @AvailCredit = 
