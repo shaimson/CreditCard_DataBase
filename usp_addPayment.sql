@@ -6,7 +6,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-ALTER PROCEDURE usp_addPayment
+Create PROCEDURE usp_addPayment
 	@paymentDate date,
 	@amount decimal (10,2),
 	@cardNum varchar(16)

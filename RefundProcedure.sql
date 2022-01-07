@@ -1,4 +1,4 @@
-use master
+use CreditCard
 go 
 
 SET ANSI_NULLS ON
@@ -6,11 +6,9 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-create PROCEDURE usp_refund
-
-	@RefundID int,
+alter PROCEDURE usp_refund
 	@PurchaseNum int,
-	@CreditCardNum varchar(20),
+	@CreditCardNum varchar (16),
 	@Amount	decimal (8,2)
 AS
 BEGIN
@@ -57,8 +55,8 @@ BEGIN
 	set CurrentBalance = CurrentBalance - @amount
 	where CreditCardNum like @CreditCardNum
 
-	insert into Refund (RefundID, PurchaseNum, CreditCardNum, Amount)
-	values (@RefundID, @PurchaseNum, @CreditCardNum, @amount)
+	insert into Refund ( PurchaseNum, CreditCardNum, Amount)
+	values (@PurchaseNum, @CreditCardNum, @amount)
 
 	end try
 	begin catch;

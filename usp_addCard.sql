@@ -6,7 +6,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-ALTER PROCEDURE usp_addCard
+CREATE PROCEDURE usp_addCard
 	@cardNum varchar(16), 
 	@cardType int,
 	@company varchar(45),
