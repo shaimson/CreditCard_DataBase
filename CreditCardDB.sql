@@ -87,31 +87,31 @@ create table Purchases(
 )
 
 create table FeeType(
-FeeTypeID int identity(1,1) not null,
-FeeType varchar(45) not null
-constraint[PK_FEETYPEID] primary key(FeeTypeID),
-constraint [Fee_Check] check (FeeType in ('LATEPAYMENT', 'INTEREST'))
+	FeeTypeID int identity(1,1) not null,
+	FeeType varchar(45) not null
+	constraint[PK_FEETYPEID] primary key(FeeTypeID),
+	constraint [Fee_Check] check (FeeType in ('LATEPAYMENT', 'INTEREST'))
 )
 
 create table Fees(
-FeeNum int identity(1,1) not null,
-FeeType int not null,
-DateApplied Date not null,
-Amount Decimal(10,2) not null,
-CreditCardNum varchar(16) not null
-constraint [PK_FEENUM] primary key(FeeNum),
-constraint [FK_FEETYPE] foreign key(FeeType) references FeeType(FeeTypeID),
-constraint [FK_CREDNUM] foreign key(CreditCardNum) references CreditCard(CreditCardNum),
-constraint [FeeAmount_Check] check (Amount > 0)
+	FeeNum int identity(1,1) not null,
+	FeeType int not null,
+	DateApplied Date not null,
+	Amount Decimal(10,2) not null,
+	CreditCardNum varchar(16) not null
+	constraint [PK_FEENUM] primary key(FeeNum),
+	constraint [FK_FEETYPE] foreign key(FeeType) references FeeType(FeeTypeID),
+	constraint [FK_CREDNUM] foreign key(CreditCardNum) references CreditCard(CreditCardNum),
+	constraint [FeeAmount_Check] check (Amount > 0)
 )
 
 create table Refund(
-RefundID int identity(1,1) not null,
-PurchaseNum int not null,
-CreditCardNum varchar(16) not null,
-Amount Decimal(10,2) not null,
-constraint [PK_REFUNDID] primary key(RefundID),
-constraint [FK_PURCHNUM] foreign key(PurchaseNum) references Purchases(PurchaseNum),
-constraint [FK_CREDITNUM] foreign key(CreditCardNum) references CreditCard(CreditCardNum),
-constraint [RefundAmount_Check] check (Amount > 0)
+	RefundID int identity(1,1) not null,
+	PurchaseNum int not null,
+	CreditCardNum varchar(16) not null,
+	Amount Decimal(10,2) not null,
+	constraint [PK_REFUNDID] primary key(RefundID),
+	constraint [FK_PURCHNUM] foreign key(PurchaseNum) references Purchases(PurchaseNum),
+	constraint [FK_CREDITNUM] foreign key(CreditCardNum) references CreditCard(CreditCardNum),
+	constraint [RefundAmount_Check] check (Amount > 0)
 )

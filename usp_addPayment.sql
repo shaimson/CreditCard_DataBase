@@ -29,7 +29,7 @@ BEGIN
 	declare @statusID int                            
 	select @statusID = [Status]
 	from CreditCard
-	where @cardNum like CreditCardNum
+	where CreditCardNum like @cardNum 
 
 	declare @status varchar(20)
 	select @status = [Status]
