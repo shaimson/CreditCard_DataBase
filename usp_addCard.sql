@@ -17,8 +17,10 @@ CREATE PROCEDURE usp_addCard
 	@creditLimit decimal(10,2)
 AS
 BEGIN
+
 	begin try
 	SET NOCOUNT ON;
+
 	declare @ccType int
 	select @ccType = TypeID
 	from CreditCardType
@@ -28,6 +30,7 @@ BEGIN
 	select @typeName = [Type] 
 	from CreditCardType
 	where TypeID = @ccType
+
 	if (len(@cardNum) != 16 and @typeName in ('VISA' , 'MASTERCARD', 'DISCOVER')) or (len(@cardNum) != 15 and @typeName like 'AMEX')
 	begin; 
 	throw 80000, 'Invalid Card Number', 1
@@ -36,10 +39,14 @@ BEGIN
 
 	insert into CreditCard(CreditCardNum, [Type], Company, IssueDate, ExpirationDate, CurrentBalance,[Status], CreditLimit)
 	values(@cardNum, @cardType, @company, @issueDate, @expirationDate, @currentBalance, @cardStatus, @creditLimit)
-	end try
-	begin catch;
-	throw 80001, 'Card could not be processed', 1;
-	end catch
 
+	end try
+
+	begin catch
+
+	throw 80001, 'Card could not be processed', 1;
+
+	end catch
+    
 END
 GO
