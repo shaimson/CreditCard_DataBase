@@ -6,7 +6,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-Create PROCEDURE usp_addPayment
+CREATE PROCEDURE usp_addPayment
 	@paymentDate date,
 	@amount decimal (10,2),
 	@cardNum varchar(16)
@@ -16,15 +16,17 @@ BEGIN
 
 	begin try
 
-    declare @balance decimal (10,2)
-	select @balance =  CurrentBalance
+
+    declare @currBalance decimal (10,2)
+	select @currBalance =  CurrentBalance
 	from CreditCard 
 	where CreditCardNum like @cardNum
 
-	if @amount > @balance
-	begin;
-	throw 80005, 'Insufficient Funds', 1
+	if @amount > @currBalance
+	begin; 
+		throw 90002, 'Amount above balance', 1
 	end
+
 
 	declare @statusID int                            
 	select @statusID = [Status]
