@@ -40,6 +40,21 @@ from PurchaseTypes
 
 exec usp_Purchase 1500.34, '2020-05-22', 1324, 5, 5424678911225577   
 exec usp_Purchase 350.00, '2019-12-05', 2641,3,342467891122558
-exec usp_Purchase 259.00, '2020-01-14', 9023, 8, 6424678911225512
+exec usp_Purchase 259.00, '2020-01-14', 9023, 8, 342467891122551
 exec usp_Purchase 12000.99, '2021-04-15', 9223, 7, 6424678911225512
 exec usp_Purchase 67.93, '2019-12-30', 5768, 6, 5424678911225577
+
+--new insertions
+select *
+from CreditCard
+
+exec usp_Purchase 2000, '2020-07-18', 9023, 1, 342467891122551
+
+insert into Vendors(VendorID, VendorName, VendorStreet, VendorCity, VendorState, VendorZip)
+values(7253, 'Shop Rite', '1080 McDonald Avenue', 'Brooklyn', 'NY', 11230)
+
+exec usp_Purchase 4000, '2020-12-30', 7253, 1, 342467891122551
+
+exec usp_Purchase 2500.13, '2021-05-16', 7253, 1, 342467891122558
+exec usp_Purchase 1500.13, '2021-10-16', 7253, 1, 342467891122558
+

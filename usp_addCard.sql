@@ -19,15 +19,11 @@ AS
 BEGIN
 	begin try
 	SET NOCOUNT ON;
-	declare @ccType int
-	select @ccType = TypeID
-	from CreditCardType
-	where @ccType = @cardType
 	
 	declare @typeName varchar(20)
 	select @typeName = [Type] 
 	from CreditCardType
-	where TypeID = @ccType
+	where TypeID = @cardType
 	if (len(@cardNum) != 16 and @typeName in ('VISA' , 'MASTERCARD', 'DISCOVER')) or (len(@cardNum) != 15 and @typeName like 'AMEX')
 	begin; 
 	throw 80000, 'Invalid Card Number', 1
