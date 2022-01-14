@@ -174,16 +174,31 @@ where Feetype.FeeType like 'LatePayment' and year(dateapplied)=2020
 --(you may have to research rollup and cube to write this query).  
 --Include CreditCard that weren’t used and all types of Purchases, even if that type of Purchase hasn’t occurred.
 
-select distinct Purchases.CreditCardNum,
-	 PurchaseTypes.ValidType,
+select coalesce( CreditCard.CreditCardNum, '-'),
+	 coalesce(PurchaseTypes.ValidType, '-'),
 	isnull(sum(amount), 0) as totals
 from CreditCard
 	left join Purchases
 	on Purchases.CreditCardNum = CreditCard.CreditCardNum 
 	right join PurchaseTypes
 	on  PurchaseTypes.typeId = Purchases.PurchaseType 	 
-group by cube(Purchases.CreditCardNum, PurchaseTypes.ValidType)
-order by  Purchases.CreditCardNum, ValidType 
+group by cube(CreditCard.CreditCardNum, PurchaseTypes.ValidType)
+order by  CreditCard.CreditCardNum, ValidType 
+
+--The data wasn't coming out right in the above query, but we were able to get it separately
+--for CreditCards and for Purchases here:
+select CreditCard.CreditCardNum, isnull(sum(amount), 0) as Totals
+from CreditCard
+left join Purchases
+on Purchases.CreditCardNum = CreditCard.CreditCardNum
+group by cube(CreditCard.CreditCardNum)
+
+select PurchaseTypes.ValidType, isnull(sum(amount), 0) as Totals
+from PurchaseTypes
+left join Purchases
+on Purchases.PurchaseType = PurchaseTypes.TypeId
+group by cube(PurchaseTypes.ValidType)
+
 
 --16. For each Vendor, list the vendor name and what are the total purchases for each month of the 
 --current year. Include the $ amount for each month on the same row as the Vendor name, 
